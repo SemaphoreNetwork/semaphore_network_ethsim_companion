@@ -104,6 +104,7 @@ export function CreateTransaction(): ReactElement {
 
   useEffect((): void => {
     setRlpTx(getRLPEncoding())
+    setTxHash("hash placeholder");
     if (!library) {
       setSigner(undefined);
       return;
@@ -215,12 +216,12 @@ export function CreateTransaction(): ReactElement {
 
   return (
     <>
- 
-      <Card >
-      <Card.Body>
-      <Grid.Container justify="center" >
+ <Grid.Container gap={2} justify="center">
+      <Card justify="center"  css={{ w: "90%" }}>
+      <Card.Body >
+      {/* <Grid.Container  justify="center"  >
       <Grid
-      >
+      > */}
         <StyledLabel>Signing for:</StyledLabel>
         {/* <div> */}
         {signerAddress? signerAddress :<em>{`No Sig`}</em>}
@@ -235,9 +236,11 @@ export function CreateTransaction(): ReactElement {
         {/* </div> */}
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
+        <br/>
         <StyledLabel htmlFor="amountToken">Amount Send (ETH)</StyledLabel>
         <br/>
         <Input
+          css={{ w: "100%" }}
           id="amountToken"
           type="text"
           placeholder={amount ? amount :amount}
@@ -247,10 +250,11 @@ export function CreateTransaction(): ReactElement {
         
         <br/>
 
-        <StyledLabel htmlFor="receiverAddress">Receiver Address:</StyledLabel>
+        <StyledLabel htmlFor="receiverAddress">Recepient Address:</StyledLabel>
       
         <br/>
         <Input
+          css={{ w: "100%" }}
           id="receiverAddress"
           type="text"
           placeholder={transaction.to ? transaction.to : 'no to address' }
@@ -263,6 +267,7 @@ export function CreateTransaction(): ReactElement {
         <StyledLabel htmlFor="rawTx">RawTxn:</StyledLabel>
         <br/>
         <Input
+          css={{ w: "100%" }}
           id="rawTx"
           type="text"
           placeholder={getRLPEncoding()}
@@ -276,6 +281,7 @@ export function CreateTransaction(): ReactElement {
         <StyledLabel htmlFor="txHash">Tx Hash to Copy</StyledLabel>
         <br/>
         <Input
+          css={{ w: "100%" }}
           id="txHash"
           type="text"
           placeholder={txHash? txHash : 'none'}
@@ -292,6 +298,7 @@ export function CreateTransaction(): ReactElement {
         <StyledLabel htmlFor="pasteSig">Paste Signature Here:</StyledLabel>
         <br/>
         <Input
+          css={{ w: "100%" }}
           id="pasteSig"
           type="text"
           placeholder={sig? sig : 'none'}
@@ -313,17 +320,18 @@ export function CreateTransaction(): ReactElement {
           }}
           onClick={handleSigSubmit}
         >
-          Submit Transaction
+          Ready To Submit Signature  `{'>'}`
           {sig}
         </Button>
         {/* <Input label="nextTx" placeholder="txn">
 
 
         </Input> */}
-      </Grid>
-      </Grid.Container>
+      {/* </Grid>
+      </Grid.Container> */}
       </Card.Body>
       </Card>
+      </Grid.Container>
     </>
   );
 }

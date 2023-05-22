@@ -33,19 +33,15 @@ export const Content = () => (
 
 export function Header() {
     return (
-        <Box
-        css={{
-          maxW: "100%"
-        }}
-      >
+        <Box>
         <Navbar isBordered variant="sticky">
           <Navbar.Brand
           css={{
             maxW: "50%",
             minH: "100%",
-            align: "left"
+            align: "left",
+            justify: "center"
           }}>
-            {/* <AcmeLogo /> */}
              <img src={logo} />
             {/* <Text b color="inherit" hideIn="xs">
               Semaphore Network
