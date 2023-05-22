@@ -88,9 +88,8 @@ export function CreateTransaction(): ReactElement {
 
   const [signer, setSigner] = useState<Signer>();
   const [greeterContract, setGreeterContract] = useState<Contract>();
-  const [greeterContractAddr, setGreeterContractAddr] = useState<string>('');
   const [greeting, setGreeting] = useState<string>('');
-  const [greetingInput, setGreetingInput] = useState<string>('');
+
   
   const [txHash, setTxHash] = useState<string>('');
   const [rlpTx, setRlpTx] = useState<string>('');
@@ -131,64 +130,6 @@ export function CreateTransaction(): ReactElement {
 
     getGreeting(greeterContract);
   }, [greeterContract, greeting]);
-
-  function handleDeployContract(event: MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-
-    // only deploy the Greeter contract one time, when a signer is defined
-    if (greeterContract || !signer) {
-      return;
-    }
-
-    async function deployGreeterContract(signer: Signer): Promise<void> {
-      const Greeter = new ethers.ContractFactory(
-        GreeterArtifact.abi,
-        GreeterArtifact.bytecode,
-        signer
-      );
-
-      try {
-        const greeterContract = await Greeter.deploy('Hello, Hardhat!');
-
-        await greeterContract.deployed();
-
-        const greeting = await greeterContract.greet();
-
-        setGreeterContract(greeterContract);
-        setGreeting(greeting);
-
-        window.alert(`Greeter deployed to: ${greeterContract.address}`);
-
-        setGreeterContractAddr(greeterContract.address);
-      } catch (error: any) {
-        window.alert(
-          'Error!' + (error && error.message ? `\n\n${error.message}` : '')
-        );
-      }
-    }
-
-    deployGreeterContract(signer);
-  }
-
-  function handleGreetingChange(event: ChangeEvent<HTMLInputElement>): void {
-    event.preventDefault();
-    setGreetingInput(event.target.value);
-  }
-
-  function handleGreetingSubmit(event: MouseEvent<HTMLButtonElement>): void {
-    event.preventDefault();
-
-    if (!greeterContract) {
-      window.alert('Undefined greeterContract');
-
-      return;
-    }
-
-    if (!greetingInput) {
-      window.alert('Greeting cannot be empty');
-      return;
-    }
-}
 
     function handleSigSubmit(event: MouseEvent<HTMLButtonElement>): void {
         event.preventDefault();
