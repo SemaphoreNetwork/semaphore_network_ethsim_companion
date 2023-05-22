@@ -16,6 +16,7 @@ import {Buffer} from 'buffer';
 import { Button, Input, Spacer, Grid, Card } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
 
+import { Header } from './Header';
 
 const BB = () => <Button>Click me</Button>;
 
@@ -84,7 +85,7 @@ function parseCardSig(derSig:string){
     
 }
 
-export function CreateTransaction(): ReactElement {
+export function PasteSignature(): ReactElement {
   const context = useWeb3React<Provider>();
   const { library, active } = context;
 
@@ -159,7 +160,8 @@ export function CreateTransaction(): ReactElement {
 
   return (
     <>
- <Grid.Container gap={2} justify="center">
+    <Header/>
+    <Grid.Container gap={2} justify="center">
       <Card justify="center"  css={{ w: "90%" }}>
       <Card.Body >
       {/* <Grid.Container  justify="center"  >
@@ -180,80 +182,19 @@ export function CreateTransaction(): ReactElement {
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
         <br/>
-        <StyledLabel htmlFor="amountToken">Amount Send (ETH)</StyledLabel>
+        <StyledLabel htmlFor="txSummary">Transaction Summary</StyledLabel>
         <br/>
-        <Input
-          css={{ w: "100%" }}
-          id="amountToken"
-          type="text"
-          placeholder={amount ? amount :amount}
-          onChange={handleAmountChange}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input>
-        
-        <br/>
-
-        <StyledLabel htmlFor="receiverAddress">Recepient Address:</StyledLabel>
-      
-        <br/>
-        <Input
-          css={{ w: "100%" }}
-          id="receiverAddress"
-          type="text"
-          placeholder={transaction.to ? transaction.to : 'no to address' }
-          onChange={handleAddressChange}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input>
-        <br/>
-        {/* Kinda confusing to include :<StyledLabel htmlFor="rawTx">RawTxn:</StyledLabel>
-        <br/>
-        <Input
-          css={{ w: "100%" }}
-          id="rawTx"
-          type="text"
-          placeholder={getRLPEncoding()}
-          onChange={()=>{setRlpTx(getRLPEncoding())
-                         setTxHash(ethers.utils.keccak256(rlpTx))
-                         console.log(ethers.utils.keccak256(rlpTx))
-                         console.log(rlpTx)}}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input>
-        <br/> */}
-        <StyledLabel htmlFor="txHash">Tx Hash to Copy</StyledLabel>
-        <br/>
-        <Input
-          css={{ w: "100%" }}
-          id="txHash"
-          type="text"
-          placeholder={txHash? txHash : 'none'}
-          onChange={()=>{return;}}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input>
-
-
-        <CopyToClipboard text={txHash}
-          onCopy={() => {}}>
-          <Button>Copy</Button>
-        </CopyToClipboard>
-        <br/>
-        {/* <StyledLabel htmlFor="pasteSig">Paste Signature Here:</StyledLabel>
+        <StyledLabel htmlFor="pasteSig">Paste Sig</StyledLabel>
         <br/>
         <Input
           css={{ w: "100%" }}
           id="pasteSig"
           type="text"
-          placeholder={sig? sig : 'none'}
-          onChange={()=>{
-            return;
-            // setSig(gsm7.encode(v.target.value));
-         
-            // console.log(gsm7.decode(Buffer.from(v.target.value, 'hex')))
-        }}
+          placeholder={amount ? amount :amount}
+          onChange={handleAmountChange}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input> */}
-
-        <p/>
-        <Link to="/pastesig">
+        ></Input>
+       
         <Button
           disabled={!sig ? true : false}
           style={{
@@ -262,11 +203,9 @@ export function CreateTransaction(): ReactElement {
           }}
           onClick={handleSigSubmit}
         >
-          Ready To Submit Signature  `{'>'}`
+           Submit Transaction `{'>'}`
           {sig}
         </Button>
-        </Link>
-       
         {/* <Input label="nextTx" placeholder="txn">
 
 
