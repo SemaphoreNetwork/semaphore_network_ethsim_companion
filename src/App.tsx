@@ -1,6 +1,9 @@
 import { ReactElement } from 'react';
 import styled from 'styled-components';
 import { CreateTransaction } from './components/CreateTransaction';
+import {Header} from './components/Header'
+import {NextUIProvider} from '@nextui-org/react';
+
 
 const StyledAppDiv = styled.div`
   display: grid;
@@ -9,8 +12,11 @@ const StyledAppDiv = styled.div`
 
 export function App(): ReactElement {
   return (
-    <StyledAppDiv>
-      <CreateTransaction/>
-    </StyledAppDiv>
+    <NextUIProvider>
+      <StyledAppDiv>
+        <Header/>
+        <CreateTransaction/>
+      </StyledAppDiv>
+    </NextUIProvider>
   );
 }

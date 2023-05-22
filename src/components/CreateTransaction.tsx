@@ -12,7 +12,11 @@ import GreeterArtifact from '../artifacts/contracts/Greeter.sol/Greeter.json';
 import { Provider } from '../utils/provider';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {Buffer} from 'buffer';
+import {Buffer} from 'buffer'; 
+import { Button, Input, Spacer, Grid, Card } from '@nextui-org/react';
+
+const BB = () => <Button>Click me</Button>;
+
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 
@@ -207,121 +211,101 @@ export function CreateTransaction(): ReactElement {
       }
     
 
-    async function submitGreeting(greeterContract: Contract): Promise<void> {
-      try {
-        const setGreetingTxn = await greeterContract.setGreeting(greetingInput);
-
-        await setGreetingTxn.wait();
-
-        const newGreeting = await greeterContract.greet();
-        window.alert(`Success!\n\nGreeting is now: ${newGreeting}`);
-
-        if (newGreeting !== greeting) {
-          setGreeting(newGreeting);
-        }
-      } catch (error: any) {
-        window.alert(
-          'Error!' + (error && error.message ? `\n\n${error.message}` : '')
-        );
-      }
-
-    submitGreeting(greeterContract);
-  }
+    
 
   return (
     <>
-      {/* <StyledDeployContractButton
-        disabled={!active || greeterContract ? true : false}
-        style={{
-          cursor: !active || greeterContract ? 'not-allowed' : 'pointer',
-          borderColor: !active || greeterContract ? 'unset' : 'blue'
-        }}
-        onClick={handleDeployContract}
+ 
+      <Card >
+      <Card.Body>
+      <Grid.Container justify="center" >
+      <Grid
       >
-        Deploy Greeter Contract
-      </StyledDeployContractButton> */}
-
-      {/* <SectionDivider /> */}
-      
-      <StyledGreetingDiv>
         <StyledLabel>Signing for:</StyledLabel>
-        <div>
+        {/* <div> */}
         {signerAddress? signerAddress :<em>{`No Sig`}</em>}
-        </div>
+        {/* </div> */}
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
-        <div></div>
+        {/* <div></div> */}
         <StyledLabel>Current nonce:</StyledLabel>
-        <div>
+        {/* <div> */}
           {/* {greeting ? greeting : <em>{`<Contract not yet deployed>`}</em>} */}
           {transaction.nonce ? transaction.nonce : <em>{`Manual input`}</em>}
 
-        </div>
+        {/* </div> */}
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
-        <StyledLabel htmlFor="amountToken">Amount Native ETH to Send</StyledLabel>
-        <StyledInput
+        <StyledLabel htmlFor="amountToken">Amount Send (ETH)</StyledLabel>
+        <br/>
+        <Input
           id="amountToken"
           type="text"
           placeholder={amount ? amount :amount}
           onChange={handleAmountChange}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></StyledInput>
+        ></Input>
         
         <br/>
 
         <StyledLabel htmlFor="receiverAddress">Receiver Address:</StyledLabel>
-        <StyledInput
+      
+        <br/>
+        <Input
           id="receiverAddress"
           type="text"
           placeholder={transaction.to ? transaction.to : 'no to address' }
           onChange={handleAddressChange}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></StyledInput>
-
+        ></Input>
+        <br/>
+        <StyledLabel htmlFor="Next Screen">COPY STUFFS</StyledLabel>
         <br/>
         <StyledLabel htmlFor="rawTx">RawTxn:</StyledLabel>
-        <StyledInput
+        <br/>
+        <Input
           id="rawTx"
           type="text"
           placeholder={getRLPEncoding()}
           onChange={()=>{setRlpTx(getRLPEncoding())
-                         setTxHash(ethers.utils.keccak256(rlpTx))}}
+                         setTxHash(ethers.utils.keccak256(rlpTx))
+                         console.log(ethers.utils.keccak256(rlpTx))
+                         console.log(rlpTx)}}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></StyledInput>
+        ></Input>
         <br/>
         <StyledLabel htmlFor="txHash">Tx Hash to Copy</StyledLabel>
-
-        <StyledInput
+        <br/>
+        <Input
           id="txHash"
           type="text"
           placeholder={txHash? txHash : 'none'}
           onChange={()=>{return;}}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></StyledInput>
+        ></Input>
 
 
         <CopyToClipboard text={txHash}
           onCopy={() => {}}>
-          <button>Copy</button>
+          <Button>Copy</Button>
         </CopyToClipboard>
-        
+        <br/>
         <StyledLabel htmlFor="pasteSig">Paste Signature Here:</StyledLabel>
-        <StyledInput
+        <br/>
+        <Input
           id="pasteSig"
           type="text"
           placeholder={sig? sig : 'none'}
-          onChange={(v)=>{
-            setSig(gsm7.encode(v.target.value));
-            // console.log(sig)
-
-            //setSig(gsm7.decode(Buffer.from(v.target.value, 'hex')))
-            console.log(gsm7.encode(v.target.value))
+          onChange={()=>{
+            return;
+            // setSig(gsm7.encode(v.target.value));
+         
+            // console.log(gsm7.decode(Buffer.from(v.target.value, 'hex')))
         }}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></StyledInput>
+        ></Input>
 
         <p/>
-        <StyledButton
+        <Button
           disabled={!sig ? true : false}
           style={{
             cursor: !sig ? 'not-allowed' : 'pointer',
@@ -329,10 +313,17 @@ export function CreateTransaction(): ReactElement {
           }}
           onClick={handleSigSubmit}
         >
-          Submit Raw To Etherscan
+          Submit Transaction
           {sig}
-        </StyledButton>
-      </StyledGreetingDiv>
+        </Button>
+        {/* <Input label="nextTx" placeholder="txn">
+
+
+        </Input> */}
+      </Grid>
+      </Grid.Container>
+      </Card.Body>
+      </Card>
     </>
   );
 }
