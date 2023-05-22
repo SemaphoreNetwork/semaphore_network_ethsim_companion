@@ -30,7 +30,6 @@ export function App(): ReactElement {
       <StyledAppDiv>
         <Header/>
         <CreateTransaction/>
-        <Link to="/pastesig">Next </Link> 
       </StyledAppDiv>
     </NextUIProvider>
   );
