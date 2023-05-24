@@ -73,6 +73,7 @@ let transaction = {
     chainId: 1
 };
 
+
 function getRLPEncoding(){
     return ethers.utils.serializeTransaction(transaction);
 }
@@ -103,22 +104,27 @@ export function CreateTransaction(): ReactElement {
 
 
 
+  function getSignedTransaction(){
+    return rlpTx + "sig"
+  }
+
   useEffect((): void => {
     setRlpTx(getRLPEncoding())
-    const hashedTx = ethers.utils.keccak256(rlpTx);  
-    setTxHash(hashedTx);
-    console.log(hashedTx);
-    
+
     if (!library) {
       setSigner(undefined);
       return;
     }
+    if(rlpTx){
+      const hashedTx = ethers.utils.keccak256(rlpTx);  
+      setTxHash(hashedTx);
+      console.log(hashedTx)
+    }
    
 
-        
 
     setSigner(library.getSigner());
-  }, [library, txHash]);
+  }, [library, txHash, rlpTx]);
 
   useEffect((): void => {
     if (!greeterContract) {
@@ -155,6 +161,10 @@ export function CreateTransaction(): ReactElement {
         setAmount(event.target.value);
         transaction.value = ethers.utils.parseEther(amount);
         console.log(transaction.value);
+
+        const hashedTx = ethers.utils.keccak256(rlpTx);  
+        setTxHash(hashedTx);
+        console.log(hashedTx)
       }
     
 
@@ -233,7 +243,7 @@ export function CreateTransaction(): ReactElement {
       
 
       </Card.Body>
-      <Link to="/pastesig">
+      <Link to="/pastesig" state={{rlp:rlpTx}}>
         <Button
           disabled={!sig ? true : false}
           style={{

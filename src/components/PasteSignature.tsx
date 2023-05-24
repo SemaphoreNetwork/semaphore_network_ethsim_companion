@@ -14,7 +14,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import {Buffer} from 'buffer'; 
 import { Button, Input, Spacer, Grid, Card } from '@nextui-org/react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { Header } from './Header';
 
@@ -102,9 +102,14 @@ export function PasteSignature(): ReactElement {
   const [amount, setAmount] = useState<string>('');
   const [signerAddress, setSignerAddress] = useState<string>('');
 
+  const location = useLocation();
+  const rlp = location.state.rlp;
+
+
 
 
   useEffect((): void => {
+    console.log(rlp);
     setRlpTx(getRLPEncoding())
     setTxHash("hash placeholder");
     if (!library) {
