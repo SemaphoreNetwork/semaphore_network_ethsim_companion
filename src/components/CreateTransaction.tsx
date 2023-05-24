@@ -105,17 +105,20 @@ export function CreateTransaction(): ReactElement {
 
   useEffect((): void => {
     setRlpTx(getRLPEncoding())
-    setTxHash("hash placeholder");
+    const hashedTx = ethers.utils.keccak256(rlpTx);  
+    setTxHash(hashedTx);
+    console.log(hashedTx);
+    
     if (!library) {
       setSigner(undefined);
       return;
     }
-    if(rlpTx){
-        setTxHash(ethers.utils.keccak256(rlpTx))
-    }
+   
+
+        
 
     setSigner(library.getSigner());
-  }, [library]);
+  }, [library, txHash]);
 
   useEffect((): void => {
     if (!greeterContract) {
@@ -159,9 +162,10 @@ export function CreateTransaction(): ReactElement {
 
   return (
     <>
- <Grid.Container gap={2} justify="center">
+    <Grid>
+    <Grid.Container gap={2} justify="center">
       <Card justify="center"  css={{ w: "90%" }}>
-      <Card.Body >
+      <Card.Body justify="center">
       {/* <Grid.Container  justify="center"  >
       <Grid
       > */}
@@ -205,24 +209,11 @@ export function CreateTransaction(): ReactElement {
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
         ></Input>
         <br/>
-        {/* Kinda confusing to include :<StyledLabel htmlFor="rawTx">RawTxn:</StyledLabel>
+       
+        <StyledLabel htmlFor="txHash">Copy This Hash</StyledLabel>
         <br/>
         <Input
-          css={{ w: "100%" }}
-          id="rawTx"
-          type="text"
-          placeholder={getRLPEncoding()}
-          onChange={()=>{setRlpTx(getRLPEncoding())
-                         setTxHash(ethers.utils.keccak256(rlpTx))
-                         console.log(ethers.utils.keccak256(rlpTx))
-                         console.log(rlpTx)}}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input>
-        <br/> */}
-        <StyledLabel htmlFor="txHash">Tx Hash to Copy</StyledLabel>
-        <br/>
-        <Input
-          css={{ w: "100%" }}
+              css={{ w: "100%" }}
           id="txHash"
           type="text"
           placeholder={txHash? txHash : 'none'}
@@ -236,46 +227,30 @@ export function CreateTransaction(): ReactElement {
           <Button>Copy</Button>
         </CopyToClipboard>
         <br/>
-        {/* <StyledLabel htmlFor="pasteSig">Paste Signature Here:</StyledLabel>
-        <br/>
-        <Input
-          css={{ w: "100%" }}
-          id="pasteSig"
-          type="text"
-          placeholder={sig? sig : 'none'}
-          onChange={()=>{
-            return;
-            // setSig(gsm7.encode(v.target.value));
-         
-            // console.log(gsm7.decode(Buffer.from(v.target.value, 'hex')))
-        }}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></Input> */}
 
         <p/>
-        <Link to="/pastesig">
+        
+      
+
+      </Card.Body>
+      <Link to="/pastesig">
         <Button
           disabled={!sig ? true : false}
           style={{
             cursor: !sig ? 'not-allowed' : 'pointer',
-            borderColor: !sig ? 'unset' : 'blue'
+            borderColor: !sig ? 'unset' : 'blue',
+          
           }}
           onClick={handleSigSubmit}
         >
           Ready To Submit Signature  `{'>'}`
           {sig}
         </Button>
-        </Link>
-       
-        {/* <Input label="nextTx" placeholder="txn">
-
-
-        </Input> */}
-      {/* </Grid>
-      </Grid.Container> */}
-      </Card.Body>
+      </Link>
       </Card>
+   
       </Grid.Container>
+      </Grid>
     </>
   );
 }

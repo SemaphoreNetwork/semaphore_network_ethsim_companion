@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { App } from './pages/App';
-import {Header} from './components/Header'
 import './index.css';
 import { getProvider } from './utils/provider';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -15,7 +14,6 @@ ReactDOM.render(
       <BrowserRouter>
       <Routes>
         <Route path="/app" element={<App/>}/>
-        <Route path="/header" element={<Header/>} />
         <Route path="/pastesig" element={<PasteSignature/>}/>
       </Routes>
       </BrowserRouter>
