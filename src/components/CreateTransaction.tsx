@@ -74,9 +74,6 @@ let transaction = {
 };
 
 
-function getRLPEncoding(){
-    return ethers.utils.serializeTransaction(transaction);
-}
 
 function parseCardSig(derSig:string){
     //decode dersig
@@ -103,10 +100,17 @@ export function CreateTransaction(): ReactElement {
   const [signerAddress, setSignerAddress] = useState<string>('');
 
 
+  const [tx, setTx] = useState(transaction);
+  const [userCopied, setUserCopied] = useState(false)
+
 
   function getSignedTransaction(){
     return rlpTx + "sig"
   }
+
+  function getRLPEncoding(){
+    return ethers.utils.serializeTransaction(tx);
+}
 
   useEffect((): void => {
     setRlpTx(getRLPEncoding())
@@ -142,29 +146,48 @@ export function CreateTransaction(): ReactElement {
     getGreeting(greeterContract);
   }, [greeterContract, greeting]);
 
+
     function handleSigSubmit(event: MouseEvent<HTMLButtonElement>): void {
         event.preventDefault();
         window.alert(sig);
         
         return;
-
     }
     
     function handleAddressChange(event: ChangeEvent<HTMLInputElement>): void {
         event.preventDefault();
       //  setReceiverAddress(event.target.value);
-         transaction.to = recieverAddress;
+         let t = {...transaction, to: recieverAddress}
+         setTx(t);
+         console.log('tx:', tx)
+         setRlpTx(getRLPEncoding())
+         console.log('rlp', rlpTx)
+
       }
 
       function handleAmountChange(event: ChangeEvent<HTMLInputElement>): void {
         event.preventDefault();
         setAmount(event.target.value);
-        transaction.value = ethers.utils.parseEther(amount);
-        console.log(transaction.value);
+        try{
+          setTx({...tx, value: ethers.utils.parseEther(event.target.value)});
+          console.log('tx:', tx)
+          setRlpTx(getRLPEncoding())
 
-        const hashedTx = ethers.utils.keccak256(rlpTx);  
-        setTxHash(hashedTx);
-        console.log(hashedTx)
+          if(rlpTx){
+            const hashedTx = ethers.utils.keccak256(rlpTx); 
+            
+            setTxHash(hashedTx);
+            console.log(hashedTx)
+
+            console.log('rlp', rlpTx)
+
+            
+          }
+          
+        }catch(e){
+          console.log("exception")
+        }
+
       }
     
 
@@ -214,7 +237,7 @@ export function CreateTransaction(): ReactElement {
           css={{ w: "100%" }}
           id="receiverAddress"
           type="text"
-          placeholder={transaction.to ? transaction.to : 'no to address' }
+          placeholder={tx.to ? tx.to : 'no to address' }
           onChange={handleAddressChange}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
         ></Input>
@@ -227,14 +250,13 @@ export function CreateTransaction(): ReactElement {
           id="txHash"
           type="text"
           placeholder={txHash? txHash : 'none'}
-          onChange={()=>{return;}}
+          onChange={()=>{console.log("txhash changed");}}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
         ></Input>
 
-
-        <CopyToClipboard text={txHash}
-          onCopy={() => {}}>
-          <Button>Copy</Button>
+    {/* onCopy ?  */}
+        <CopyToClipboard text={txHash}>
+          <Button onPress={()=>console.log(rlpTx)}>Copy</Button>
         </CopyToClipboard>
         <br/>
 
@@ -245,13 +267,13 @@ export function CreateTransaction(): ReactElement {
       </Card.Body>
       <Link to="/pastesig" state={{rlp:rlpTx}}>
         <Button
-          disabled={!sig ? true : false}
+          disabled={!userCopied ? true : false}
           style={{
-            cursor: !sig ? 'not-allowed' : 'pointer',
-            borderColor: !sig ? 'unset' : 'blue',
+            cursor: !userCopied ? 'not-allowed' : 'pointer',
+            borderColor: !userCopied ? 'unset' : 'blue',
           
           }}
-          onClick={handleSigSubmit}
+          onPress={()=>{console.log('r', rlpTx)}}
         >
           Ready To Submit Signature  `{'>'}`
           {sig}

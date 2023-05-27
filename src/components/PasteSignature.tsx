@@ -103,13 +103,18 @@ export function PasteSignature(): ReactElement {
   const [signerAddress, setSignerAddress] = useState<string>('');
 
   const location = useLocation();
-  const rlp = location.state.rlp;
+  
+  const [rlp, setRLP] = useState();
 
 
 
 
   useEffect((): void => {
-    console.log(rlp);
+    if(rlp){
+      setRLP(location.state.rlp)
+    }
+    console.log(location);
+
     setRlpTx(getRLPEncoding())
     setTxHash("hash placeholder");
     if (!library) {
