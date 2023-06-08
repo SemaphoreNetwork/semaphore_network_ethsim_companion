@@ -5,64 +5,28 @@ import {
   MouseEvent,
   ReactElement,
   useEffect,
-  useState
+  useState,
+  useMemo
 } from 'react';
 import styled from 'styled-components';
-import GreeterArtifact from '../artifacts/contracts/Greeter.sol/Greeter.json';
 import { Provider } from '../utils/provider';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-import {Buffer} from 'buffer'; 
-import { Button, Input, Spacer, Grid, Card } from '@nextui-org/react';
+import { Button, Input, Dropdown, Grid, Card, Image } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
 
+import eth from "../svg/ethLogo.svg";
 
-const BB = () => <Button>Click me</Button>;
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
-
-
-const gsm7 = require('gsm7')
-
-
-const StyledDeployContractButton = styled.button`
-  width: 180px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-  place-self: center;
-`;
-
-const StyledGreetingDiv = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-columns: 135px 2.7fr 1fr;
-  grid-gap: 10px;
-  place-self: center;
-  align-items: left;
-`;
 
 const StyledLabel = styled.label`
   font-weight: bold;
 `;
 
-const StyledInput = styled.input`
-  padding: 0.4rem 0.6rem;
-  line-height: 2fr;
-  width: auto;
-`;
 
-const StyledButton = styled.button`
-  width: 150px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-`;
-
-let transaction = {
+let defaultTransaction = {
     to: '0xa238b6008Bc2FBd9E386A5d4784511980cE504Cd',
     value: ethers.utils.parseEther('0.01'),
     gasLimit: '21000',
@@ -73,14 +37,6 @@ let transaction = {
     chainId: 1
 };
 
-
-
-function parseCardSig(derSig:string){
-    //decode dersig
-    console.log(derSig);
-
-    
-}
 
 export function CreateTransaction(): ReactElement {
   const context = useWeb3React<Provider>();
@@ -100,8 +56,16 @@ export function CreateTransaction(): ReactElement {
   const [signerAddress, setSignerAddress] = useState<string>('');
 
 
-  const [tx, setTx] = useState(transaction);
+  const [tx, setTx] = useState(defaultTransaction);
   const [userCopied, setUserCopied] = useState(false)
+
+  const [selectedToken, setSelectedToken] = useState(new Set(["Select Token"]));
+
+
+  const selectedValue = useMemo(
+    () => Array.from(selectedToken).join(", ").replaceAll("_", " "),
+    [selectedToken]
+  );
 
 
   function getSignedTransaction(){
@@ -157,7 +121,7 @@ export function CreateTransaction(): ReactElement {
     function handleAddressChange(event: ChangeEvent<HTMLInputElement>): void {
         event.preventDefault();
       //  setReceiverAddress(event.target.value);
-         let t = {...transaction, to: recieverAddress}
+         let t = {...tx, to: recieverAddress}
          setTx(t);
          console.log('tx:', tx)
          setRlpTx(getRLPEncoding())
@@ -190,8 +154,13 @@ export function CreateTransaction(): ReactElement {
 
       }
     
-
-    
+      const menuItems = [
+        { key: "ETH", name: "Ethereum" , icon: "eth.svg"},
+        { key: "WETH", name: "Wrapped Ethereum", icon: "weth.svg" },
+        { key: "UNI", name: "Uniswap" },
+        { key: "WBTC", name: "Wrapped BTC" },
+      ];
+  
 
   return (
     <>
@@ -211,15 +180,16 @@ export function CreateTransaction(): ReactElement {
         <StyledLabel>Current nonce:</StyledLabel>
         {/* <div> */}
           {/* {greeting ? greeting : <em>{`<Contract not yet deployed>`}</em>} */}
-          {transaction.nonce ? transaction.nonce : <em>{`Manual input`}</em>}
+          {tx.nonce ? tx.nonce : <em>{`Manual input`}</em>}
 
         {/* </div> */}
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
         <br/>
-        <StyledLabel htmlFor="amountToken">Amount Send (ETH)</StyledLabel>
-        <br/>
-        <Input
+        <StyledLabel htmlFor="amountToken">Amount Send</StyledLabel>
+        
+      
+      <Input
           css={{ w: "100%" }}
           id="amountToken"
           type="text"
@@ -229,8 +199,32 @@ export function CreateTransaction(): ReactElement {
         ></Input>
         
         <br/>
+        <Dropdown>
+          <Dropdown.Button flat
+          icon={<Image src="https://raw.githubusercontent.com/Uniswap/interface/main/src/assets/svg/ethereum_square_logo.svg" height={30} width={30} />}
 
-        <StyledLabel htmlFor="receiverAddress">Recepient Address:</StyledLabel>
+          >{selectedValue}</Dropdown.Button>
+          <Dropdown.Menu 
+                  aria-label="Dynamic Actions" 
+                  items={menuItems}
+                  selectedKeys={selectedToken}
+                  onSelectionChange={setSelectedToken}
+                  selectionMode="single"
+
+          >
+            {(item:any) => (
+              <Dropdown.Item
+                key={item.key}
+                color={item.key === "delete" ? "error" : "default"}
+                icon={<Image src="https://raw.githubusercontent.com/Uniswap/interface/main/src/assets/svg/ethereum_square_logo.svg" height={30} width={30} />}
+              >
+                {item.name}
+              </Dropdown.Item>
+            )}
+          </Dropdown.Menu>
+        </Dropdown>
+
+        <StyledLabel htmlFor="receiverAddress">Recepient Address</StyledLabel>
       
         <br/>
         <Input

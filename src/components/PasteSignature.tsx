@@ -109,6 +109,7 @@ export function PasteSignature(): ReactElement {
 
 
 
+
   useEffect((): void => {
     if(rlp){
       setRLP(location.state.rlp)
@@ -145,8 +146,8 @@ export function PasteSignature(): ReactElement {
   }, [greeterContract, greeting]);
 
     function handleSigSubmit(event: MouseEvent<HTMLButtonElement>): void {
-        event.preventDefault();
-        window.alert(sig);
+      //etherscan POST
+        console.log("pasted signature", sig);
         
         return;
 
@@ -158,11 +159,9 @@ export function PasteSignature(): ReactElement {
          transaction.to = recieverAddress;
       }
 
-      function handleAmountChange(event: ChangeEvent<HTMLInputElement>): void {
+      function handleSigChange(event: ChangeEvent<HTMLInputElement>): void {
         event.preventDefault();
-        setAmount(event.target.value);
-        transaction.value = ethers.utils.parseEther(amount);
-        console.log(transaction.value);
+        setSig(event.target.value);
       }
     
 
@@ -201,7 +200,7 @@ export function PasteSignature(): ReactElement {
           id="pasteSig"
           type="text"
           placeholder={amount ? amount :amount}
-          onChange={handleAmountChange}
+          onChange={handleSigChange}
           style={{ fontStyle: greeting ? 'normal' : 'italic' }}
         ></Input>
        
@@ -214,7 +213,7 @@ export function PasteSignature(): ReactElement {
           onClick={handleSigSubmit}
         >
            Submit Transaction `{'>'}`
-          {sig}
+
         </Button>
         {/* <Input label="nextTx" placeholder="txn">
 
