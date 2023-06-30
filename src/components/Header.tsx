@@ -35,37 +35,35 @@ export const Box = styled("div", {
 //   );
 
 export function Header() {
-    return (
-        <Box>
-        <Navbar isBordered variant="sticky">
-          <Navbar.Brand
+  return (
+    <Box>
+      <Navbar isBordered variant="sticky">
+        <Navbar.Brand
           css={{
             maxW: "50%",
-            minH: "100%",
+            minH: "80%",
             align: "left",
-            justify: "center"
+            justify: "left"
           }}>
-             <img src={logo} />
-            {/* <Text b color="inherit" hideIn="xs">
+          <img src={logo} />
+          {/* <Text b color="inherit" hideIn="xs">
               Semaphore Network
             </Text> */}
-          </Navbar.Brand>
-          <Navbar.Content hideIn="xs" variant="underline">
-            <Navbar.Link isActive href="/app">Wallet</Navbar.Link>
-            <Navbar.Link href="#">Network</Navbar.Link>
-            <Navbar.Link href="#">Home</Navbar.Link>
-          </Navbar.Content>
-          <Navbar.Content>
-            <Navbar.Link color="inherit" href="#">
-              Become A Provider
-            </Navbar.Link>
-            <Navbar.Item>
-              <Button auto flat as={Link} href="#">
-                Use The Network
-              </Button>
-            </Navbar.Item>
-          </Navbar.Content>
-        </Navbar>
-      </Box>
-    )
-  }
+        </Navbar.Brand>
+        <Navbar.Content hideIn="xs" variant="underline">
+          <Navbar.Link href="#">Home</Navbar.Link>
+          <Navbar.Link href="/app">Wallet</Navbar.Link>
+          <Navbar.Link href="/networkstats">Stats</Navbar.Link>
+        </Navbar.Content>
+        <Navbar.Content>
+          <Navbar.Link color="inherit" href="/addhost">
+            Become A Host
+          </Navbar.Link>
+          <Navbar.Link color="inherit" href="/addsubscriber">
+            Use The Network
+          </Navbar.Link>
+        </Navbar.Content>
+      </Navbar>
+    </Box>
+  )
+}
