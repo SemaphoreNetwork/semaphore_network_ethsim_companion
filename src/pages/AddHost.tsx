@@ -1,6 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector'
-
 import { Contract, ethers, Signer } from 'ethers';
 import {
     ChangeEvent,
@@ -17,7 +16,6 @@ import { Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { NextUIProvider } from '@nextui-org/react';
 import SemaphoreHSSArtifact from '../utils/SemaphoreHSS.json'
-
 
 
 const StyledLabel = styled.label`
@@ -39,8 +37,7 @@ let defaultTransaction = {
 const hssSepoliaAddress = '0x1841A903a1eDAF18d82D161c37068DeD1DCd539a';
 
 
-
-export function AddSubscriber(): ReactElement {
+export function AddHost(): ReactElement {
     const injectedConnector = new InjectedConnector({ supportedChainIds: [1, 3, 4, 5, 42, 11155111], })
 
     const { chainId, account, activate, active, library } = useWeb3React<Provider>();
@@ -50,29 +47,32 @@ export function AddSubscriber(): ReactElement {
     const semaphoreHSSContract = new Contract(hssContractAddress, SemaphoreHSSArtifact.abi, signer);
     const [hssContract, setHssContract] = useState<Contract>(new Contract(hssContractAddress, SemaphoreHSSArtifact.abi, signer));
 
+
     const [greeting, setGreeting] = useState<string>('');
 
 
     const [rlpTx, setRlpTx] = useState<string>('');
+    const [sig, setSig] = useState<string>('');
+
+    const [signerAddress, setSignerAddress] = useState<string>('');
 
 
-    const [userCopied, setUserCopied] = useState(false);
+    const [tx, setTx] = useState(defaultTransaction);
+    const [userCopied, setUserCopied] = useState(false)
 
-    const [subscriberPublicKey, setSubscriberPublicKey] = useState('0xnull');
+    const [providerPublicKey, setProviderPublicKey] = useState('0xnull');
 
     useEffect((): void => {
         if (!library) {
-          // setSigner(undefined);
-          return;
+            // setSigner(undefined);
+            return;
         }
         setSigner(library.getSigner());
         // setHssContract(semaphoreHSSContract)
         // console.log('contract', hssContract)
         console.log('signer', library.getSigner())
-    
-      }, [library]);
-    
-    
+
+    }, [library]);
 
     const onConnectClick = () => {
         activate(injectedConnector)
@@ -80,46 +80,25 @@ export function AddSubscriber(): ReactElement {
     }
 
 
-    function handleSubscriberPublicKeyInput(event: ChangeEvent<HTMLInputElement>): void {
-        event.preventDefault(); 
-        setSubscriberPublicKey(event.target.value)
-       
-    }
-
-    const addSubscriberKey = async() => {
-        if(hssContract && signer && subscriberPublicKey){
-            //validate pubkey len etc. 
-            if(subscriberPublicKey.length != 32 || 34){
-                const res = await semaphoreHSSContract.addSubscriberAndKey(signer.getAddress(), subscriberPublicKey)
-                console.log('Pub Key added', res)
-            }
-          }
+    function handleProviderPublicKeyInput(event: ChangeEvent<HTMLInputElement>): void {
+        event.preventDefault();
+        setProviderPublicKey(event.target.value)
 
     }
 
-    const getSubscriberKey = async(subscriberIndex:number) =>{
-        const res = await semaphoreHSSContract.callStatic.getSubscriberKey(subscriberIndex);
+
+    const getProviderKey = async (providerIndex: number) => {
+        const res = await semaphoreHSSContract.callStatic.getProviderKey(providerIndex);
         console.log(res);
+
     }
 
-  
-
-   
-    // useEffect((): void => {
-    //     if (!greeterContract) {
-    //         return;
-    //     }
-
-    //     async function getGreeting(greeterContract: Contract): Promise<void> {
-    //         const _greeting = await greeterContract.greet();
-
-    //         if (_greeting !== greeting) {
-    //             setGreeting(_greeting);
-    //         }
-    //     }
-
-    //     getGreeting(greeterContract);
-    // }, [greeterContract, greeting]);
+    const addProviderKey = async () => {
+        if (hssContract && signer) {
+            const res = await semaphoreHSSContract.addProviderAndKey(signer.getAddress(), '0xdeadbeefabadbabedeadbeefabadbabe')
+            console.log('Pub Key added', res)
+        }
+    }
 
     return (
         <>
@@ -144,23 +123,23 @@ export function AddSubscriber(): ReactElement {
 
                                 )}
 
-                                <StyledLabel htmlFor="subscriberStatus">Semaphore Subscriber Status</StyledLabel>
+                                <StyledLabel htmlFor="hostStatus">Semaphore Host Status</StyledLabel>
                                 <br />
-                                <StyledLabel htmlFor="pubKey">New Subscriber Public Key</StyledLabel>
+
+                                <StyledLabel htmlFor="pubKey">New Host Public Key</StyledLabel>
+
                                 <br />
                                 <Input
                                     css={{ w: "100%" }}
                                     id="pubKey"
                                     type="text"
-                                    placeholder={subscriberPublicKey ? subscriberPublicKey : 'input subscriber public key'}
-                                    onChange={handleSubscriberPublicKeyInput}
+                                    placeholder={providerPublicKey ? providerPublicKey : 'input new host public key'}
+                                    onChange={handleProviderPublicKeyInput}
                                     style={{ fontStyle: greeting ? 'normal' : 'italic' }}
                                 ></Input>
                                 <br />
 
                                 <p />
-
-
                             </Card.Body>
                                 <Button
                                     disabled={!userCopied ? true : false}
@@ -169,9 +148,10 @@ export function AddSubscriber(): ReactElement {
                                         borderColor: !userCopied ? 'unset' : 'blue',
 
                                     }}
-                                    onPress={async() => { await addSubscriberKey() }}
+                                    onPress={async() => { await addProviderKey()}}
                                 >
-                                    Add New Subscriber  `{'>'}`
+                                    Add New Host  `{'>'}`
+                                    {sig}
                                 </Button>
                         </Card>
 

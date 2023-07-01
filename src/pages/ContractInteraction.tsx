@@ -13,11 +13,6 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import { Provider } from '../utils/provider';
-import { Button, Input, Dropdown, Grid, Card, Image } from '@nextui-org/react';
-import { Link } from 'react-router-dom';
-import { Header } from '../components/Header';
-import { NextUIProvider } from '@nextui-org/react';
-
 import SemaphoreHSSArtifact from '../utils/SemaphoreHSS.json'
 
 
@@ -34,8 +29,11 @@ export function ContractInteraction(): ReactElement {
   const { chainId, account, activate, active, library } = useWeb3React<Provider>();
 
   const [signer, setSigner] = useState<Signer>();
-  const [hssContract, setHssContract] = useState<Contract>();
   const [hssContractAddress, setHssContractAddress] = useState<string>(hssSepoliaAddress);
+
+  const semaphoreHSSContract = new Contract(hssContractAddress, SemaphoreHSSArtifact.abi, signer);
+  const [hssContract, setHssContract] = useState<Contract>(new Contract(hssContractAddress, SemaphoreHSSArtifact.abi, signer));
+
 
   const onClick = () => {
     activate(injectedConnector)
@@ -45,30 +43,27 @@ export function ContractInteraction(): ReactElement {
 
   useEffect((): void => {
     if (!library) {
-      setSigner(undefined);
+      // setSigner(undefined);
       return;
     }
     setSigner(library.getSigner());
-    setHssContract(new Contract(hssSepoliaAddress, SemaphoreHSSArtifact.abi, signer))
+    // setHssContract(semaphoreHSSContract)
+    // console.log('contract', hssContract)
+    console.log('signer', library.getSigner())
 
   }, [library]);
 
-  useEffect(() => {
-    console.log(signer, chainId, account, active)
-    console.log(hssContract)
-  },);
 
 
-  const getProviderKey = async() =>{
-    if(hssContract){
-      const res = await hssContract.getProviderKey(0);
-      console.log('Pub Key for provider @ index:', 0, res);
-    }
+  const getProviderKey = async(providerIndex:number) =>{
+      const res = await semaphoreHSSContract.callStatic.getProviderKey(providerIndex);
+      console.log(res);
+    
 
   }
   const addProviderKey = async() =>{
     if(hssContract && signer){
-      const res = await hssContract.addProviderAndKey(signer.getAddress(), '0xdeadbeefabadbabedeadbeefabadbabe')
+      const res = await semaphoreHSSContract.addProviderAndKey(signer.getAddress(), '0xdeadbeefabadbabedeadbeefabadbabe')
       console.log('Pub Key added', res)
     }
   }
@@ -87,7 +82,7 @@ export function ContractInteraction(): ReactElement {
         </button>
 
       )}
-      <button type="button" onClick={getProviderKey}>
+      <button type="button" onClick={async()=>{await getProviderKey(0)}}>
         getProvider @ 0
       </button>
 
