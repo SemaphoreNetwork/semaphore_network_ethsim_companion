@@ -162,8 +162,8 @@ export function CreateTransaction(): ReactElement {
     <>
       <Grid>
         <Grid.Container gap={2} justify="center">
-          <Card justify="center" css={{ w: "90%" }}>
-            <Card.Body justify="center">
+          <Card css={{ w: "90%" }}>
+            <Card.Body >
               {/* <Grid.Container  justify="center"  >
       <Grid
       > */}
