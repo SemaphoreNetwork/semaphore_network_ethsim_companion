@@ -1,18 +1,17 @@
-import { useWeb3React } from '@web3-react/core';
-import { Contract, ethers, Signer } from 'ethers';
+import { useWeb3React } from "@web3-react/core";
+import { Contract, ethers, Signer } from "ethers";
 import {
   ChangeEvent,
   MouseEvent,
   ReactElement,
   useEffect,
-  useState
-} from 'react';
-import styled from 'styled-components';
-import GreeterArtifact from '../artifacts/contracts/Greeter.sol/Greeter.json';
-import { Provider } from '../utils/provider';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-const gsm7 = require('gsm7')
-
+  useState,
+} from "react";
+import styled from "styled-components";
+import GreeterArtifact from "../artifacts/contracts/Greeter.sol/Greeter.json";
+import { Provider } from "../utils/provider";
+// import { CopyToClipboard } from "react-copy-to-clipboard";
+const gsm7 = require("gsm7");
 
 const StyledDeployContractButton = styled.button`
   width: 180px;
@@ -55,9 +54,9 @@ export function RLPEncodedTx(): ReactElement {
 
   const [signer, setSigner] = useState<Signer>();
   const [greeterContract, setGreeterContract] = useState<Contract>();
-  const [greeterContractAddr, setGreeterContractAddr] = useState<string>('');
-  const [greeting, setGreeting] = useState<string>('');
-  const [greetingInput, setGreetingInput] = useState<string>('');
+  const [greeterContractAddr, setGreeterContractAddr] = useState<string>("");
+  const [greeting, setGreeting] = useState<string>("");
+  const [greetingInput, setGreetingInput] = useState<string>("");
 
   useEffect((): void => {
     if (!library) {
@@ -75,7 +74,6 @@ export function RLPEncodedTx(): ReactElement {
 
     async function getGreeting(greeterContract: Contract): Promise<void> {
       const _greeting = await greeterContract.greet();
-
       if (_greeting !== greeting) {
         setGreeting(_greeting);
       }
@@ -100,7 +98,7 @@ export function RLPEncodedTx(): ReactElement {
       );
 
       try {
-        const greeterContract = await Greeter.deploy('Hello, Hardhat!');
+        const greeterContract = await Greeter.deploy("Hello, Hardhat!");
 
         await greeterContract.deployed();
 
@@ -114,7 +112,7 @@ export function RLPEncodedTx(): ReactElement {
         setGreeterContractAddr(greeterContract.address);
       } catch (error: any) {
         window.alert(
-          'Error!' + (error && error.message ? `\n\n${error.message}` : '')
+          "Error!" + (error && error.message ? `\n\n${error.message}` : "")
         );
       }
     }
@@ -131,12 +129,12 @@ export function RLPEncodedTx(): ReactElement {
     event.preventDefault();
 
     if (!greeterContract) {
-      window.alert('Undefined greeterContract');
+      window.alert("Undefined greeterContract");
       return;
     }
 
     if (!greetingInput) {
-      window.alert('Greeting cannot be empty');
+      window.alert("Greeting cannot be empty");
       return;
     }
 
@@ -154,7 +152,7 @@ export function RLPEncodedTx(): ReactElement {
         }
       } catch (error: any) {
         window.alert(
-          'Error!' + (error && error.message ? `\n\n${error.message}` : '')
+          "Error!" + (error && error.message ? `\n\n${error.message}` : "")
         );
       }
     }
@@ -176,7 +174,7 @@ export function RLPEncodedTx(): ReactElement {
       </StyledDeployContractButton> */}
 
       {/* <SectionDivider /> */}
-      
+
       <StyledGreetingDiv>
         <StyledLabel>Signing for: </StyledLabel>
         <div>
@@ -192,7 +190,6 @@ export function RLPEncodedTx(): ReactElement {
         <div>
           {/* {greeting ? greeting : <em>{`<Contract not yet deployed>`}</em>} */}
           {greeting ? greeting : <em>{`Manual input`}</em>}
-
         </div>
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
@@ -200,37 +197,35 @@ export function RLPEncodedTx(): ReactElement {
         <StyledInput
           id="amountToken"
           type="text"
-          placeholder={greeting ? '' : '<Contract not yet deployed>'}
+          placeholder={greeting ? "" : "<Contract not yet deployed>"}
           onChange={handleGreetingChange}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
+          style={{ fontStyle: greeting ? "normal" : "italic" }}
         ></StyledInput>
-        
-        <br/>
+
+        <br />
 
         <StyledLabel htmlFor="gasPrice">GaPrice:</StyledLabel>
         <StyledInput
           id="gasPrice"
           type="text"
-          placeholder={greeting ? '' : '<Contract not yet deployed>'}
+          placeholder={greeting ? "" : "<Contract not yet deployed>"}
           onChange={handleGreetingChange}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
+          style={{ fontStyle: greeting ? "normal" : "italic" }}
         ></StyledInput>
 
-<CopyToClipboard text='aasdfasdfasdfsadfasdfa'
-          onCopy={() => {}}>
+        {/* <CopyToClipboard text="aasdfasdfasdfsadfasdfa" onCopy={() => {}}>
           <span>Copy to clipboard with span</span>
-        </CopyToClipboard>
+        </CopyToClipboard> */}
         <StyledButton
           disabled={!active || !greeterContract ? true : false}
           style={{
-            cursor: !active || !greeterContract ? 'not-allowed' : 'pointer',
-            borderColor: !active || !greeterContract ? 'unset' : 'blue'
+            cursor: !active || !greeterContract ? "not-allowed" : "pointer",
+            borderColor: !active || !greeterContract ? "unset" : "blue",
           }}
           onClick={handleGreetingSubmit}
         >
           Submit
         </StyledButton>
-        
       </StyledGreetingDiv>
     </>
   );

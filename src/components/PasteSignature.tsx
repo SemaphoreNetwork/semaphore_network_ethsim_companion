@@ -9,16 +9,12 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import { Provider } from '../utils/provider';
-import { Button, Input, Spacer, Grid, Card } from '@nextui-org/react';
+import { Button, Input, Col, Row, Divider, Card } from 'antd';
 import { useLocation } from 'react-router-dom';
-
-import { Header } from './Header';
-import { NextUIProvider } from '@nextui-org/react';
 
 const StyledLabel = styled.label`
   font-weight: bold;
 `;
-
 
 let transaction = {
   to: '0xa238b6008Bc2FBd9E386A5d4784511980cE504Cd',
@@ -36,10 +32,8 @@ function getRLPEncoding() {
 }
 
 function parseCardSig(derSig: string) {
-  //decode dersig
+  // TODO: decode dersig
   console.log(derSig);
-
-
 }
 
 export function PasteSignature(): ReactElement {
@@ -90,7 +84,6 @@ export function PasteSignature(): ReactElement {
 
     async function getGreeting(greeterContract: Contract): Promise<void> {
       const _greeting = await greeterContract.greet();
-
       if (_greeting !== greeting) {
         setGreeting(_greeting);
       }
@@ -102,9 +95,7 @@ export function PasteSignature(): ReactElement {
   function handleSigSubmit(event: MouseEvent<HTMLButtonElement>): void {
     //etherscan POST
     console.log("pasted signature", sig);
-
     return;
-
   }
 
   function handleAddressChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -118,19 +109,12 @@ export function PasteSignature(): ReactElement {
     setSig(event.target.value);
   }
 
-
-
-
   return (
     <>
-      <NextUIProvider>
-        <Header />
-        <Grid.Container gap={2} justify="center">
-          <Card justify="center" css={{ w: "90%" }}>
-            <Card.Body >
-              {/* <Grid.Container  justify="center"  >
-      <Grid
-      > */}
+      <Row>
+        <Col span={8}>
+          <Card style={{ width: "90%", justifySelf: "center" }}>
+            <div>
               <StyledLabel>Signing for:</StyledLabel>
               {/* <div> */}
               {signerAddress ? signerAddress : <em>{`No Sig`}</em>}
@@ -151,13 +135,12 @@ export function PasteSignature(): ReactElement {
               <StyledLabel htmlFor="pasteSig">Paste Sig</StyledLabel>
               <br />
               <Input
-                css={{ w: "100%" }}
+                style={{ fontStyle: greeting ? 'normal' : 'italic', width: "100%" }}
                 id="pasteSig"
                 type="text"
                 placeholder={amount ? amount : amount}
                 onChange={handleSigChange}
-                style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-              ></Input>
+              />
 
               <Button
                 disabled={!sig ? true : false}
@@ -168,18 +151,11 @@ export function PasteSignature(): ReactElement {
                 onClick={handleSigSubmit}
               >
                 Submit Transaction `{'>'}`
-
               </Button>
-              {/* <Input label="nextTx" placeholder="txn">
-
-
-        </Input> */}
-              {/* </Grid>
-      </Grid.Container> */}
-            </Card.Body>
+            </div>
           </Card>
-        </Grid.Container>
-      </NextUIProvider>
+        </Col>
+      </Row>
     </>
   );
 }
