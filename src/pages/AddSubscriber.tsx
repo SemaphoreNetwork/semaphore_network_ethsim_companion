@@ -64,6 +64,11 @@ export function AddSubscriber(): ReactElement {
   useEffect((): void => {
     if (!library) {
       // setSigner(undefined);
+      const query = window.location.search
+      const urlParams = new URLSearchParams(query)
+      const publicKey = urlParams.get('pubk')
+      if(publicKey)
+        setSubscriberPublicKey(publicKey)
       return;
     }
     setSigner(library.getSigner());

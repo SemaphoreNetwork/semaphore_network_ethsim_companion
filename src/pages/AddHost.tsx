@@ -67,6 +67,11 @@ export function AddHost(): ReactElement {
   useEffect((): void => {
     if (!library) {
       // setSigner(undefined);
+      const query = window.location.search
+      const urlParams = new URLSearchParams(query)
+      const publicKey = urlParams.get('pubk')
+      if(publicKey)
+        setProviderPublicKey(publicKey)
       return;
     }
     setSigner(library.getSigner());
