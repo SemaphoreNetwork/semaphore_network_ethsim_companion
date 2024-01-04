@@ -12,7 +12,7 @@ import {
 } from "react";
 import styled from "styled-components";
 import { Provider } from "../utils/provider";
-import { Button, Input, Row, Col, Card } from "antd";
+import { Button, Input, Row, Col, Card, Typography, Divider } from "antd";
 import { Link } from "react-router-dom";
 import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
 
@@ -112,57 +112,65 @@ export function AddSubscriber(): ReactElement {
     <>
       <Row>
         <Col span={8}>
-          <Card style={{ width: "90%", justifySelf: "center" }}>
-            <StyledLabel>Connected Account:</StyledLabel>
-            {account ? account : <em>{`None Connected`}</em>}
+          <Card style={{ minWidth: "280px", justifySelf: "center" }}>
+            <Row>
+              <Col span={24}>
+                <StyledLabel>Connected Account:</StyledLabel>
+              </Col>
+              <Col span={24}>
+                <Typography.Paragraph ellipsis={true}>
+                  {account ? account : <em>{`None Connected`}</em>}
+                </Typography.Paragraph>
+              </Col>
 
-            <div></div>
-            <br />
-            {active ? (
-              <div>✅ </div>
-            ) : (
-              <button type="button" onClick={onConnectClick}>
-                Connect Wallet
-              </button>
-            )}
+              <Col span={24}>
+                {active ? (
+                  <div>✅ </div>
+                ) : (
+                  <Button onClick={onConnectClick}>Connect Wallet</Button>
+                )}
+              </Col>
 
-            <StyledLabel htmlFor="subscriberStatus">
-              Semaphore Subscriber Status
-            </StyledLabel>
-            <br />
-            <StyledLabel htmlFor="pubKey">
-              New Subscriber Public Key
-            </StyledLabel>
-            <br />
-            <Input
-              id="pubKey"
-              type="text"
-              placeholder={
-                subscriberPublicKey
-                  ? subscriberPublicKey
-                  : "input subscriber public key"
-              }
-              onChange={handleSubscriberPublicKeyInput}
-              style={{
-                width: "100%",
-                fontStyle: greeting ? "normal" : "italic",
-              }}
-            />
-            <br />
+              <Divider>Subscriber Status</Divider>
 
-            <p />
-            <Button
-              disabled={!userCopied ? true : false}
-              style={{
-                cursor: !userCopied ? "not-allowed" : "pointer",
-                borderColor: !userCopied ? "unset" : "blue",
-              }}
-              onClick={async () => {
-                await addSubscriberKey();
-              }}
-            >
-              Add New Subscriber `{">"}`
-            </Button>
+              <Col span={24} style={{ marginBottom: "14px" }}>
+                <StyledLabel htmlFor="pubKey">
+                  New Subscriber Public Key
+                </StyledLabel>
+              </Col>
+
+              <Col span={24} style={{ marginBottom: "14px" }}>
+                <Input
+                  id="pubKey"
+                  type="text"
+                  placeholder={
+                    subscriberPublicKey
+                      ? subscriberPublicKey
+                      : "input subscriber public key"
+                  }
+                  onChange={handleSubscriberPublicKeyInput}
+                  style={{
+                    width: "100%",
+                    fontStyle: greeting ? "normal" : "italic",
+                  }}
+                />
+              </Col>
+
+              <Col span={24}>
+                <Button
+                  disabled={!userCopied ? true : false}
+                  style={{
+                    cursor: !userCopied ? "not-allowed" : "pointer",
+                    borderColor: !userCopied ? "unset" : "blue",
+                  }}
+                  onClick={async () => {
+                    await addSubscriberKey();
+                  }}
+                >
+                  Add New Subscriber `{">"}`
+                </Button>
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>
