@@ -12,10 +12,19 @@ import { ContractInteraction } from "./pages/ContractInteraction";
 const { Header, Content, Footer } = Layout;
 
 function App() {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-  // const { darkAlgorithm } = theme;
+  const token = {
+    colorLink: "#20a60e",
+    colorPrimary: "#20a60e",
+    colorInfo: "#20a60e",
+    colorSuccess: "#20a60e",
+    colorWarning: "#ffbb13",
+    colorError: "#ff070a",
+    borderRadius: 1,
+    colorBgBase: "#08080d",
+    fontSize: 14,
+    fontFamily: "VT323",
+  };
+  const { darkAlgorithm } = theme;
 
   const navbarItems = [
     {
@@ -47,8 +56,8 @@ function App() {
   return (
     <ConfigProvider
       theme={{
-        // algorithm: darkAlgorithm,
-        token: { colorPrimary: "#00b96b" },
+        algorithm: darkAlgorithm,
+        token,
       }}
     >
       <div className="App" style={{ width: "100%", height: "100%" }}>
@@ -73,10 +82,10 @@ function App() {
             <BrowserRouter>
               <div
                 style={{
-                  background: colorBgContainer,
+                  background: token.colorBgBase,
                   minHeight: "82vh",
                   padding: 24,
-                  borderRadius: borderRadiusLG,
+                  borderRadius: token.borderRadius,
                 }}
               >
                 <Routes>
