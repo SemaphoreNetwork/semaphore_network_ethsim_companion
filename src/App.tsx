@@ -20,6 +20,7 @@ function App() {
     colorWarning: "#ffbb13",
     colorError: "#ff070a",
     borderRadius: 1,
+    colorBgContainer: "#080812", // OG: #181826
     colorBgBase: "#08080d",
     fontSize: 14,
     fontFamily: "VT323",
@@ -62,14 +63,24 @@ function App() {
     >
       <div className="App" style={{ width: "100%", height: "100%" }}>
         <Layout>
-          <Header style={{ display: "flex", alignItems: "center" }}>
-            <Image src={logo} style={{ width: "100px" }} preview={false} />
+          <Header
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "#111429",
+            }}
+          >
+            <Image
+              src={logo}
+              style={{ width: "100px", marginRight: "8px" }}
+              preview={false}
+            />
             <Menu
               theme="dark"
               mode="horizontal"
               defaultSelectedKeys={["2"]}
               items={navbarItems}
-              style={{ flex: 1, minWidth: 0 }}
+              style={{ flex: 1, minWidth: 0, background: "#111429" }}
             />
           </Header>
           <Content style={{ padding: "0 48px" }}>

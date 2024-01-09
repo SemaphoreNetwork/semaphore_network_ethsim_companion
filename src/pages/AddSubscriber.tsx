@@ -64,11 +64,10 @@ export function AddSubscriber(): ReactElement {
   useEffect((): void => {
     if (!library) {
       // setSigner(undefined);
-      const query = window.location.search
-      const urlParams = new URLSearchParams(query)
-      const publicKey = urlParams.get('pubk')
-      if(publicKey)
-        setSubscriberPublicKey(publicKey)
+      const query = window.location.search;
+      const urlParams = new URLSearchParams(query);
+      const publicKey = urlParams.get("pubk");
+      if (publicKey) setSubscriberPublicKey(publicKey);
       return;
     }
     setSigner(library.getSigner());
@@ -111,7 +110,7 @@ export function AddSubscriber(): ReactElement {
   return (
     <>
       <Row>
-        <Col span={8}>
+        <Col span={24}>
           <Card style={{ minWidth: "280px", justifySelf: "center" }}>
             <Row>
               <Col span={24}>
@@ -167,7 +166,7 @@ export function AddSubscriber(): ReactElement {
                     await addSubscriberKey();
                   }}
                 >
-                  Add New Subscriber `{">"}`
+                  Add New Subscriber
                 </Button>
               </Col>
             </Row>
