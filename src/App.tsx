@@ -67,7 +67,7 @@ function App() {
             style={{
               display: "flex",
               alignItems: "center",
-              background: "#111429",
+              background: "rgb(15, 13, 28)",
             }}
           >
             <Image
@@ -80,7 +80,7 @@ function App() {
               mode="horizontal"
               defaultSelectedKeys={["2"]}
               items={navbarItems}
-              style={{ flex: 1, minWidth: 0, background: "#111429" }}
+              style={{ flex: 1, minWidth: 0, background: "rgb(15, 13, 28)" }}
             />
           </Header>
           <Content style={{ padding: "0 48px" }}>

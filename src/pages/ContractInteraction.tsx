@@ -159,6 +159,7 @@ export function ContractInteraction(): ReactElement {
             description={alert.desc}
             type={alert.isError ? "error" : "info"}
             closable
+            style={{ width: "100%" }}
             onClose={() => {
               resetAlert();
             }}
