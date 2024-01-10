@@ -11,7 +11,7 @@ import {
 } from "react";
 import styled from "styled-components";
 import { Provider } from "../utils/provider";
-import { Button, Input, Dropdown, Row, Col, Card, Image } from "antd";
+import { Button, Input, Row, Col, Card, Typography, Divider } from "antd";
 import { Link } from "react-router-dom";
 import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
 
@@ -88,6 +88,7 @@ export function AddHost(): ReactElement {
   function handleProviderPublicKeyInput(
     event: ChangeEvent<HTMLInputElement>
   ): void {
+    // TODO: Check to see if it fits proper format of a 20-byte address (0x40 chars).
     event.preventDefault();
     setProviderPublicKey(event.target.value);
   }
@@ -112,57 +113,64 @@ export function AddHost(): ReactElement {
     <>
       <Row>
         <Col span={8}>
-          <Card style={{ width: "90%", justifySelf: "center" }}>
-            <StyledLabel>Connected Account:</StyledLabel>
-            {account ? account : <em>{`None Connected`}</em>}
+          <Card style={{ minWidth: "280px", justifySelf: "center" }}>
+            <Row>
+              <Col span={24}>
+                <StyledLabel>Connected Account:</StyledLabel>
+              </Col>
+              <Col span={24}>
+                <Typography.Paragraph ellipsis={true}>
+                  {account ? account : <em>{`None Connected`}</em>}
+                </Typography.Paragraph>
+              </Col>
 
-            <div></div>
-            <br />
-            {active ? (
-              <div>✅ </div>
-            ) : (
-              <button type="button" onClick={onConnectClick}>
-                Connect Wallet
-              </button>
-            )}
+              <Col span={24}>
+                {active ? (
+                  <div>✅ </div>
+                ) : (
+                  <Button onClick={onConnectClick}>Connect Wallet</Button>
+                )}
+              </Col>
 
-            <StyledLabel htmlFor="hostStatus">
-              Semaphore Host Status
-            </StyledLabel>
-            <br />
+              <Divider>Host Status</Divider>
 
-            <StyledLabel htmlFor="pubKey">New Host Public Key</StyledLabel>
+              <Col span={24} style={{ marginBottom: "14px" }}>
+                <StyledLabel htmlFor="pubKey">New Host Public Key:</StyledLabel>
+              </Col>
 
-            <br />
-            <Input
-              id="pubKey"
-              type="text"
-              placeholder={
-                providerPublicKey
-                  ? providerPublicKey
-                  : "input new host public key"
-              }
-              onChange={handleProviderPublicKeyInput}
-              style={{
-                width: "100%",
-                fontStyle: greeting ? "normal" : "italic",
-              }}
-            />
-            <br />
+              <Col span={24} style={{ marginBottom: "14px" }}>
+                <Input
+                  id="pubKey"
+                  type="text"
+                  placeholder={
+                    providerPublicKey
+                      ? providerPublicKey
+                      : "input new host public key"
+                  }
+                  onChange={handleProviderPublicKeyInput}
+                  style={{
+                    width: "100%",
+                    fontStyle: greeting ? "normal" : "italic",
+                  }}
+                />
+              </Col>
 
-            <p />
-            <Button
-              disabled={!userCopied ? true : false}
-              style={{
-                cursor: !userCopied ? "not-allowed" : "pointer",
-                borderColor: !userCopied ? "unset" : "blue",
-              }}
-              onClick={async () => {
-                await addProviderKey();
-              }}
-            >
-              Add New Host `{">"}`{sig}
-            </Button>
+              <Col span={24}>
+                <Button
+                  disabled={!userCopied ? true : false}
+                  style={{
+                    cursor: !userCopied ? "not-allowed" : "pointer",
+                    borderColor: !userCopied ? "unset" : "blue",
+                  }}
+                  onClick={async () => {
+                    await addProviderKey();
+                  }}
+                >
+                  Add New Host
+                  {sig}
+                </Button>
+              </Col>
+            </Row>
           </Card>
         </Col>
       </Row>
