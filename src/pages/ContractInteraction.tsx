@@ -12,7 +12,7 @@ import {
   useMemo,
 } from "react";
 import styled from "styled-components";
-import { Row, Col, Typography, Button, Alert } from "antd";
+import { Row, Col, Typography, Button, Alert, Divider } from "antd";
 import { ChainSelector } from "../components/ChainSelector";
 import { Provider } from "../utils/provider";
 import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
@@ -118,9 +118,6 @@ export function ContractInteraction(): ReactElement {
     <>
       <Row>
         <Col span={24}>
-          <ChainSelector />
-        </Col>
-        <Col span={24}>
           <Typography.Paragraph>Account: {account}</Typography.Paragraph>
         </Col>
 
@@ -133,6 +130,12 @@ export function ContractInteraction(): ReactElement {
             </Button>
           )}
         </Col>
+
+        <Col span={24} style={{ marginBottom: "14px" }}>
+          <ChainSelector disabled={!active} />
+        </Col>
+
+        <Divider>Call Functions</Divider>
 
         <Col span={24} style={{ marginBottom: "14px" }}>
           <Button
