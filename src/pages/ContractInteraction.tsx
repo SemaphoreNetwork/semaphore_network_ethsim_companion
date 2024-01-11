@@ -13,7 +13,7 @@ import {
 } from "react";
 import styled from "styled-components";
 import { Row, Col, Typography, Button, Alert } from "antd";
-import type { CollapseProps } from "antd";
+import { ChainSelector } from "../components/ChainSelector";
 import { Provider } from "../utils/provider";
 import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
 
@@ -118,7 +118,7 @@ export function ContractInteraction(): ReactElement {
     <>
       <Row>
         <Col span={24}>
-          <Typography.Paragraph>ChainId: {chainId}</Typography.Paragraph>
+          <ChainSelector />
         </Col>
         <Col span={24}>
           <Typography.Paragraph>Account: {account}</Typography.Paragraph>
@@ -126,7 +126,7 @@ export function ContractInteraction(): ReactElement {
 
         <Col span={24} style={{ marginBottom: "14px" }}>
           {active ? (
-            <div style={{ height: "32px" }}>Connected ✅ </div>
+            <Typography.Paragraph>Connected ✅ </Typography.Paragraph>
           ) : (
             <Button style={{ width: "200px" }} onClick={onClick}>
               Connect
