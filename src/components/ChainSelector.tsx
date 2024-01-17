@@ -42,7 +42,13 @@ const CHAINS = {
   },
 };
 
-export function ChainSelector(): ReactElement {
+type ChainSelectorProps = {
+  disabled?: boolean;
+};
+
+export function ChainSelector(props: ChainSelectorProps): ReactElement {
+  const { disabled } = props;
+
   const [selectedOption, setSelectedOption] = useState<string>(
     // Default value:
     (() => {
@@ -94,11 +100,12 @@ export function ChainSelector(): ReactElement {
   return (
     <>
       <Row>
-        <Col span={28} style={{ marginBottom: "14px" }}>
+        <Col span={28}>
           <Text strong style={{ marginRight: "14px" }}>
             Chain ID:
           </Text>
           <Cascader
+            disabled={disabled}
             options={options}
             onChange={onChange}
             value={selectedOption as any}

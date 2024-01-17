@@ -13,6 +13,7 @@ import {
 import styled from "styled-components";
 import { Provider } from "../utils/provider";
 import { Button, Input, Row, Col, Card, Typography, Divider } from "antd";
+import { ChainSelector } from "../components/ChainSelector";
 import { Link } from "react-router-dom";
 import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
 
@@ -128,6 +129,10 @@ export function AddSubscriber(): ReactElement {
                 ) : (
                   <Button onClick={onConnectClick}>Connect Wallet</Button>
                 )}
+              </Col>
+
+              <Col span={24}>
+                <ChainSelector disabled={!active} />
               </Col>
 
               <Divider>Subscriber Status</Divider>
