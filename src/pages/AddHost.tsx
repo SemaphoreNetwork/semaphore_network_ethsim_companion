@@ -3,35 +3,21 @@ import { InjectedConnector } from "@web3-react/injected-connector";
 import { Contract, ethers, Signer } from "ethers";
 import {
   ChangeEvent,
-  MouseEvent,
   ReactElement,
   useEffect,
   useState,
-  useMemo,
 } from "react";
 import styled from "styled-components";
 import { Provider } from "../utils/provider";
 import { Button, Input, Row, Col, Card, Typography, Divider } from "antd";
 import { ChainSelector } from "../components/ChainSelector";
-import { Link } from "react-router-dom";
 import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
 
 const StyledLabel = styled.label`
   font-weight: bold;
 `;
 
-let defaultTransaction = {
-  to: "0xa238b6008Bc2FBd9E386A5d4784511980cE504Cd",
-  value: ethers.utils.parseEther("0.01"),
-  gasLimit: "21000",
-  maxPriorityFeePerGas: ethers.utils.parseUnits("7", "gwei"),
-  maxFeePerGas: ethers.utils.parseUnits("20", "gwei"),
-  nonce: 0,
-  type: 2,
-  chainId: 11155111,
-};
-
-const hssSepoliaAddress = "0x1841A903a1eDAF18d82D161c37068DeD1DCd539a";
+const SepoliaHSSAddress = "0x1841A903a1eDAF18d82D161c37068DeD1DCd539a";
 
 export function AddHost(): ReactElement {
   const injectedConnector = new InjectedConnector({
@@ -42,7 +28,7 @@ export function AddHost(): ReactElement {
     useWeb3React<Provider>();
   const [signer, setSigner] = useState<Signer>();
   const [hssContractAddress, setHssContractAddress] =
-    useState<string>(hssSepoliaAddress);
+    useState<string>(SepoliaHSSAddress);
 
   const semaphoreHSSContract = new Contract(
     hssContractAddress,
@@ -53,32 +39,25 @@ export function AddHost(): ReactElement {
     new Contract(hssContractAddress, SemaphoreHSSArtifact.abi, signer)
   );
 
-  const [greeting, setGreeting] = useState<string>("");
 
-  const [rlpTx, setRlpTx] = useState<string>("");
-  const [sig, setSig] = useState<string>("");
 
-  const [signerAddress, setSignerAddress] = useState<string>("");
-
-  const [tx, setTx] = useState(defaultTransaction);
   const [userCopied, setUserCopied] = useState(false);
 
   const [providerPublicKey, setProviderPublicKey] = useState("0xnull");
 
+  const parseUrlParams = function(){
+    //URL query pram for ?pubkey="0xabdeadbf"
+    //passes in the public key to be registered.
+    const query = window.location.search;
+    const urlParams = new URLSearchParams(query);
+    const pubkeyParams = urlParams.get("pubk");
+    pubkeyParams ? setProviderPublicKey(pubkeyParams) : setProviderPublicKey('paste provider public key here (from Semaphore HSS)')
+
+}
+
   useEffect((): void => {
-    if (!library) {
-      // setSigner(undefined);
-      const query = window.location.search;
-      const urlParams = new URLSearchParams(query);
-      const publicKey = urlParams.get("pubk");
-      if (publicKey) setProviderPublicKey(publicKey);
-      return;
-    }
-    setSigner(library.getSigner());
-    // setHssContract(semaphoreHSSContract)
-    // console.log('contract', hssContract)
-    console.log("signer", library.getSigner());
-  }, [library]);
+      parseUrlParams();
+  });
 
   const onConnectClick = () => {
     activate(injectedConnector);
@@ -154,14 +133,14 @@ export function AddHost(): ReactElement {
                   onChange={handleProviderPublicKeyInput}
                   style={{
                     width: "100%",
-                    fontStyle: greeting ? "normal" : "italic",
+                    fontStyle: "normal",
                   }}
                 />
               </Col>
 
               <Col span={24}>
                 <Button
-                  disabled={!userCopied ? true : false}
+                  disabled={providerPublicKey == "0xnull" ? false : true}
                   style={{
                     cursor: !userCopied ? "not-allowed" : "pointer",
                     borderColor: !userCopied ? "unset" : "blue",
@@ -171,7 +150,6 @@ export function AddHost(): ReactElement {
                   }}
                 >
                   Add New Host
-                  {sig}
                 </Button>
               </Col>
             </Row>
