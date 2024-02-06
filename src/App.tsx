@@ -8,6 +8,7 @@ import { NetworkOverview } from "./components/NetworkOverview";
 import { AddHost } from "./pages/AddHost";
 import { AddSubscriber } from "./pages/AddSubscriber";
 import { ContractInteraction } from "./pages/ContractInteraction";
+import { StateChannelTest } from "./pages/StateChannelTest";
 
 const { Header, Content, Footer } = Layout;
 
@@ -105,6 +106,7 @@ function App() {
                   <Route path="/addhost" element={<AddHost />} />
                   <Route path="/addsubscriber" element={<AddSubscriber />} />
                   <Route path="/contract" element={<ContractInteraction />} />
+                  <Route path="/demo" element={<StateChannelTest />} />
                 </Routes>
               </div>
             </BrowserRouter>

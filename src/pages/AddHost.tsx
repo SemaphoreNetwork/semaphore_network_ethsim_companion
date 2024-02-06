@@ -1,17 +1,12 @@
 import { useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { Contract, ethers, Signer } from "ethers";
-import {
-  ChangeEvent,
-  ReactElement,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Provider } from "../utils/provider";
 import { Button, Input, Row, Col, Card, Typography, Divider } from "antd";
 import { ChainSelector } from "../components/ChainSelector";
-import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
+import SemaphoreHSSArtifact from "../artifacts/contracts/SemaphoreHSS.sol/SemaphoreHSS.json";
 
 const StyledLabel = styled.label`
   font-weight: bold;
@@ -39,24 +34,25 @@ export function AddHost(): ReactElement {
     new Contract(hssContractAddress, SemaphoreHSSArtifact.abi, signer)
   );
 
-
-
   const [userCopied, setUserCopied] = useState(false);
 
   const [providerPublicKey, setProviderPublicKey] = useState("0xnull");
 
-  const parseUrlParams = function(){
+  const parseUrlParams = function () {
     //URL query pram for ?pubkey="0xabdeadbf"
     //passes in the public key to be registered.
     const query = window.location.search;
     const urlParams = new URLSearchParams(query);
     const pubkeyParams = urlParams.get("pubk");
-    pubkeyParams ? setProviderPublicKey(pubkeyParams) : setProviderPublicKey('paste provider public key here (from Semaphore HSS)')
-
-}
+    pubkeyParams
+      ? setProviderPublicKey(pubkeyParams)
+      : setProviderPublicKey(
+          "paste provider public key here (from Semaphore HSS)"
+        );
+  };
 
   useEffect((): void => {
-      parseUrlParams();
+    parseUrlParams();
   });
 
   const onConnectClick = () => {

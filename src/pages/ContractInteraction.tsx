@@ -1,18 +1,12 @@
 import { useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { Contract, ethers, Signer } from "ethers";
-import {
-  ReactElement,
-  useEffect,
-  useState,
-
-} from "react";
+import { ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Row, Col, Typography, Button, Alert, Divider } from "antd";
 import { ChainSelector } from "../components/ChainSelector";
 import { Provider } from "../utils/provider";
-import SemaphoreHSSArtifact from "../utils/SemaphoreHSS.json";
-
+import SemaphoreHSSArtifact from "../artifacts/contracts/SemaphoreHSS.sol/SemaphoreHSS.json";
 
 const hssSepoliaAddress = "0x1841A903a1eDAF18d82D161c37068DeD1DCd539a";
 
