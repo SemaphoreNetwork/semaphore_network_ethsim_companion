@@ -53,6 +53,10 @@ function App() {
       key: "addsubscriber",
       label: <a href="/addsubscriber">Add Subscriber</a>,
     },
+    {
+      key: "statechanneldemo",
+      label: <a href="/statechanneldemo">SC Demo</a>,
+    },
   ];
 
   return (
@@ -106,7 +110,10 @@ function App() {
                   <Route path="/addhost" element={<AddHost />} />
                   <Route path="/addsubscriber" element={<AddSubscriber />} />
                   <Route path="/contract" element={<ContractInteraction />} />
-                  <Route path="/demo" element={<StateChannelTest />} />
+                  <Route
+                    path="/statechanneldemo"
+                    element={<StateChannelTest />}
+                  />
                 </Routes>
               </div>
             </BrowserRouter>

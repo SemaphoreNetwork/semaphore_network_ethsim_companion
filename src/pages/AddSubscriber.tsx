@@ -9,10 +9,6 @@ import { Button, Input, Row, Col, Card, Typography, Divider } from "antd";
 import { ChainSelector } from "../components/ChainSelector";
 import SemaphoreHSSArtifact from "../artifacts/contracts/SemaphoreHSS.sol/SemaphoreHSS.json";
 
-const StyledLabel = styled.label`
-  font-weight: bold;
-`;
-
 const DEBUG = true;
 const SepoliaHSSAddress = "0x1841A903a1eDAF18d82D161c37068DeD1DCd539a";
 
@@ -97,7 +93,9 @@ export function AddSubscriber(): ReactElement {
           <Card style={{ minWidth: "280px", justifySelf: "center" }}>
             <Row>
               <Col span={24}>
-                <StyledLabel>Connected Account:</StyledLabel>
+                <Typography.Paragraph strong={true}>
+                  Connected Account:
+                </Typography.Paragraph>
               </Col>
               <Col span={24}>
                 <Typography.Paragraph ellipsis={true}>
@@ -120,9 +118,12 @@ export function AddSubscriber(): ReactElement {
               <Divider>Subscriber Status</Divider>
 
               <Col span={24} style={{ marginBottom: "14px" }}>
-                <StyledLabel htmlFor="pubKey">
+                <Typography.Paragraph
+                  // htmlFor="publicKey"
+                  strong={true}
+                >
                   New Subscriber Public Key
-                </StyledLabel>
+                </Typography.Paragraph>
               </Col>
 
               <Col span={24} style={{ marginBottom: "14px" }}>

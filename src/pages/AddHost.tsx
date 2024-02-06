@@ -91,7 +91,9 @@ export function AddHost(): ReactElement {
           <Card style={{ minWidth: "280px", justifySelf: "center" }}>
             <Row>
               <Col span={24}>
-                <StyledLabel>Connected Account:</StyledLabel>
+                <Typography.Paragraph strong={true}>
+                  Connected Account:
+                </Typography.Paragraph>
               </Col>
               <Col span={24}>
                 <Typography.Paragraph ellipsis={true}>
@@ -114,7 +116,12 @@ export function AddHost(): ReactElement {
               <Divider>Host Status</Divider>
 
               <Col span={24} style={{ marginBottom: "14px" }}>
-                <StyledLabel htmlFor="pubKey">New Host Public Key:</StyledLabel>
+                <Typography.Paragraph
+                  // htmlFor="publicKey"
+                  strong={true}
+                >
+                  New Host Public Key:
+                </Typography.Paragraph>
               </Col>
 
               <Col span={24} style={{ marginBottom: "14px" }}>

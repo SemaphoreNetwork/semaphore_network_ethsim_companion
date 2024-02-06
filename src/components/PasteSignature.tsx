@@ -1,30 +1,26 @@
-import { useWeb3React } from '@web3-react/core';
-import { Contract, ethers, Signer } from 'ethers';
+import { useWeb3React } from "@web3-react/core";
+import { Contract, ethers, Signer } from "ethers";
 import {
   ChangeEvent,
   MouseEvent,
   ReactElement,
   useEffect,
-  useState
-} from 'react';
-import styled from 'styled-components';
-import { Provider } from '../utils/provider';
-import { Button, Input, Col, Row, Divider, Card } from 'antd';
-import { useLocation } from 'react-router-dom';
-
-const StyledLabel = styled.label`
-  font-weight: bold;
-`;
+  useState,
+} from "react";
+import styled from "styled-components";
+import { Provider } from "../utils/provider";
+import { Button, Input, Col, Row, Divider, Card, Typography } from "antd";
+import { useLocation } from "react-router-dom";
 
 let transaction = {
-  to: '0xa238b6008Bc2FBd9E386A5d4784511980cE504Cd',
-  value: ethers.utils.parseEther('0.01'),
-  gasLimit: '21000',
-  maxPriorityFeePerGas: ethers.utils.parseUnits('5', 'gwei'),
-  maxFeePerGas: ethers.utils.parseUnits('20', 'gwei'),
+  to: "0xa238b6008Bc2FBd9E386A5d4784511980cE504Cd",
+  value: ethers.utils.parseEther("0.01"),
+  gasLimit: "21000",
+  maxPriorityFeePerGas: ethers.utils.parseUnits("5", "gwei"),
+  maxFeePerGas: ethers.utils.parseUnits("20", "gwei"),
   nonce: 0,
   type: 2,
-  chainId: 1
+  chainId: 1,
 };
 
 function getRLPEncoding() {
@@ -42,36 +38,34 @@ export function PasteSignature(): ReactElement {
 
   const [signer, setSigner] = useState<Signer>();
   const [greeterContract, setGreeterContract] = useState<Contract>();
-  const [greeting, setGreeting] = useState<string>('');
+  const [greeting, setGreeting] = useState<string>("");
 
+  const [txHash, setTxHash] = useState<string>("");
+  const [rlpTx, setRlpTx] = useState<string>("");
+  const [sig, setSig] = useState<string>("");
 
-  const [txHash, setTxHash] = useState<string>('');
-  const [rlpTx, setRlpTx] = useState<string>('');
-  const [sig, setSig] = useState<string>('');
-
-  const [recieverAddress, setReceiverAddress] = useState<string>('');
-  const [amount, setAmount] = useState<string>('');
-  const [signerAddress, setSignerAddress] = useState<string>('');
+  const [recieverAddress, setReceiverAddress] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [signerAddress, setSignerAddress] = useState<string>("");
 
   const location = useLocation();
 
   const [rlp, setRLP] = useState();
 
-
   useEffect((): void => {
     if (rlp) {
-      setRLP(location.state.rlp)
+      setRLP(location.state.rlp);
     }
     console.log(location);
 
-    setRlpTx(getRLPEncoding())
+    setRlpTx(getRLPEncoding());
     setTxHash("hash placeholder");
     if (!library) {
       setSigner(undefined);
       return;
     }
     if (rlpTx) {
-      setTxHash(ethers.utils.keccak256(rlpTx))
+      setTxHash(ethers.utils.keccak256(rlpTx));
     }
 
     setSigner(library.getSigner());
@@ -115,27 +109,42 @@ export function PasteSignature(): ReactElement {
         <Col span={8}>
           <Card style={{ width: "90%", justifySelf: "center" }}>
             <div>
-              <StyledLabel>Signing for:</StyledLabel>
+              <Typography.Paragraph>Signing for:</Typography.Paragraph>
               {/* <div> */}
               {signerAddress ? signerAddress : <em>{`No Sig`}</em>}
               {/* </div> */}
               {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
               {/* <div></div> */}
-              <StyledLabel>Current nonce:</StyledLabel>
+              <Typography.Paragraph>Current nonce:</Typography.Paragraph>
               {/* <div> */}
               {/* {greeting ? greeting : <em>{`<Contract not yet deployed>`}</em>} */}
-              {transaction.nonce ? transaction.nonce : <em>{`Manual input`}</em>}
+              {transaction.nonce ? (
+                transaction.nonce
+              ) : (
+                <em>{`Manual input`}</em>
+              )}
 
               {/* </div> */}
               {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
               <div></div>
               <br />
-              <StyledLabel htmlFor="txSummary">Transaction Summary</StyledLabel>
+              <Typography.Paragraph
+              // htmlFor="txSummary"
+              >
+                Transaction Summary
+              </Typography.Paragraph>
               <br />
-              <StyledLabel htmlFor="pasteSig">Paste Sig</StyledLabel>
+              <Typography.Paragraph
+              // htmlFor="pasteSig"
+              >
+                Paste Sig
+              </Typography.Paragraph>
               <br />
               <Input
-                style={{ fontStyle: greeting ? 'normal' : 'italic', width: "100%" }}
+                style={{
+                  fontStyle: greeting ? "normal" : "italic",
+                  width: "100%",
+                }}
                 id="pasteSig"
                 type="text"
                 placeholder={amount ? amount : amount}
@@ -145,12 +154,12 @@ export function PasteSignature(): ReactElement {
               <Button
                 disabled={!sig ? true : false}
                 style={{
-                  cursor: !sig ? 'not-allowed' : 'pointer',
-                  borderColor: !sig ? 'unset' : 'blue'
+                  cursor: !sig ? "not-allowed" : "pointer",
+                  borderColor: !sig ? "unset" : "blue",
                 }}
                 onClick={handleSigSubmit}
               >
-                Submit Transaction `{'>'}`
+                Submit Transaction `{">"}`
               </Button>
             </div>
           </Card>

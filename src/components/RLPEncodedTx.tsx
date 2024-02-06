@@ -10,43 +10,44 @@ import {
 import styled from "styled-components";
 import GreeterArtifact from "../artifacts/contracts/Greeter.sol/Greeter.json";
 import { Provider } from "../utils/provider";
+import { Button, Input, Typography } from "antd";
 // import { CopyToClipboard } from "react-copy-to-clipboard";
 const gsm7 = require("gsm7");
 
-const StyledDeployContractButton = styled.button`
-  width: 180px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-  place-self: center;
-`;
+// const StyledDeployContractButton = styled.button`
+//   width: 180px;
+//   height: 2rem;
+//   border-radius: 1rem;
+//   border-color: blue;
+//   cursor: pointer;
+//   place-self: center;
+// `;
 
-const StyledGreetingDiv = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 135px 2.7fr 1fr;
-  grid-gap: 10px;
-  place-self: center;
-  align-items: center;
-`;
+// const StyledGreetingDiv = styled.div`
+//   display: grid;
+//   grid-template-rows: 1fr 1fr 1fr;
+//   grid-template-columns: 135px 2.7fr 1fr;
+//   grid-gap: 10px;
+//   place-self: center;
+//   align-items: center;
+// `;
 
-const StyledLabel = styled.label`
-  font-weight: bold;
-`;
+// const StyledLabel = styled.label`
+//   font-weight: bold;
+// `;
 
-const StyledInput = styled.input`
-  padding: 0.4rem 0.6rem;
-  line-height: 2fr;
-`;
+// const StyledInput = styled.input`
+//   padding: 0.4rem 0.6rem;
+//   line-height: 2fr;
+// `;
 
-const StyledButton = styled.button`
-  width: 150px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-`;
+// const StyledButton = styled.button`
+//   width: 150px;
+//   height: 2rem;
+//   border-radius: 1rem;
+//   border-color: blue;
+//   cursor: pointer;
+// `;
 
 export function RLPEncodedTx(): ReactElement {
   const context = useWeb3React<Provider>();
@@ -175,8 +176,8 @@ export function RLPEncodedTx(): ReactElement {
 
       {/* <SectionDivider /> */}
 
-      <StyledGreetingDiv>
-        <StyledLabel>Signing for: </StyledLabel>
+      <div>
+        <Typography.Paragraph>Signing for: </Typography.Paragraph>
         <div>
           {/* {greeterContractAddr ? (
             greeterContractAddr
@@ -186,37 +187,47 @@ export function RLPEncodedTx(): ReactElement {
         </div>
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
-        <StyledLabel>Current nonce:</StyledLabel>
+        <Typography.Paragraph>Current nonce:</Typography.Paragraph>
         <div>
           {/* {greeting ? greeting : <em>{`<Contract not yet deployed>`}</em>} */}
           {greeting ? greeting : <em>{`Manual input`}</em>}
         </div>
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
-        <StyledLabel htmlFor="amountToken">Amount to Send</StyledLabel>
-        <StyledInput
-          id="amountToken"
-          type="text"
+        <Typography.Paragraph
+          // htmlFor="amountToken"
+          strong={true}
+        >
+          Amount to Send
+        </Typography.Paragraph>
+        <Input
+          // id="amountToken"
+          // type="text"
           placeholder={greeting ? "" : "<Contract not yet deployed>"}
           onChange={handleGreetingChange}
           style={{ fontStyle: greeting ? "normal" : "italic" }}
-        ></StyledInput>
+        ></Input>
 
         <br />
 
-        <StyledLabel htmlFor="gasPrice">GaPrice:</StyledLabel>
-        <StyledInput
+        <Typography.Paragraph
+          // htmlFor="gasPrice"
+          strong={true}
+        >
+          Gas Price:
+        </Typography.Paragraph>
+        <Input
           id="gasPrice"
-          type="text"
+          // type="text"
           placeholder={greeting ? "" : "<Contract not yet deployed>"}
           onChange={handleGreetingChange}
           style={{ fontStyle: greeting ? "normal" : "italic" }}
-        ></StyledInput>
+        ></Input>
 
         {/* <CopyToClipboard text="aasdfasdfasdfsadfasdfa" onCopy={() => {}}>
           <span>Copy to clipboard with span</span>
         </CopyToClipboard> */}
-        <StyledButton
+        <Button
           disabled={!active || !greeterContract ? true : false}
           style={{
             cursor: !active || !greeterContract ? "not-allowed" : "pointer",
@@ -225,8 +236,8 @@ export function RLPEncodedTx(): ReactElement {
           onClick={handleGreetingSubmit}
         >
           Submit
-        </StyledButton>
-      </StyledGreetingDiv>
+        </Button>
+      </div>
     </>
   );
 }
