@@ -5,6 +5,7 @@ import { Contract, Wallet, providers } from "ethers";
 
 import SemaphoreHSSArtifact from "../artifacts/contracts/SemaphoreHSS.sol/SemaphoreHSS.json";
 import TestERC20 from "../artifacts/contracts/TestERC20.sol/TestERC20.json";
+import { InjectedConnector } from "@web3-react/injected-connector";
 
 const TEST_CHAIN_ID = 11155111;
 const TEST_RPC = new providers.JsonRpcProvider(
@@ -22,7 +23,7 @@ export function TestAgentCard({
 }: {
   name: string;
   agentWallet?: Wallet;
-
+  injectedSigner: InjectedConnector;
   address: string;
   publicKey: string;
   isProvider?: boolean;
@@ -32,6 +33,8 @@ export function TestAgentCard({
   const [tokensAmount, updateTokensAmount] = useState<string>("0");
   const [ethAmount, updateEthAmount] = useState<string>("0");
   const [openChannelId, updateOpenChannelId] = useState<string>("");
+  const [isSpendingApproved, updateIsSpendingApproved] =
+    useState<boolean>(false);
 
   useEffect((): void => {
     // Retrieve agent TEST tokens balance.
@@ -56,7 +59,29 @@ export function TestAgentCard({
     updateEthAmount(res.toString());
   };
 
-  const mintTokens;
+  const sendEth = async () => {
+    const res = await operator.sendTransaction({
+      to: subscriber.address,
+      value: BigInt("50000000000000000") - BigInt(currentAmount.toString()), // 0.05 ETH
+    });
+    const receipt = await res.wait();
+    console.log("Fund ETH tx:", receipt.hash);
+  };
+
+  const mintTokens = async (amount: string) => {
+    const TestERC20Contract = new Contract(
+      TestERC20.address,
+      TestERC20.abi,
+      agentWallet
+    );
+    const res = await TestERC20Contract.mint(
+      agentWallet.address,
+      BigInt(amount)
+    );
+    const receipt = await res.wait();
+    console.log("Mint tx:", receipt.hash);
+    await getTokensBalance();
+  };
 
   return (
     <Card
@@ -84,7 +109,7 @@ export function TestAgentCard({
       style={{ width: 200 }}
     >
       <Typography.Paragraph ellipsis={true}>
-        Address: {wallet ? wallet.address : address}
+        Address: {agentWallet ? agentWallet.address : address}
       </Typography.Paragraph>
       <Typography.Paragraph>Public Key: {publicKey}</Typography.Paragraph>
       <Typography.Paragraph>TEST Tokens: {tokensAmount}</Typography.Paragraph>
